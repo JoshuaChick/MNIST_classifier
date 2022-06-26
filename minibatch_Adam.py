@@ -50,17 +50,17 @@ class Net(nn.Module):
 
 samples_in_batch = 50
 MNIST_data = MNISTDataset()
-MNIST_loaded = DataLoader(dataset=MNIST_data, batch_size=samples_in_batch, shuffle=True)
+MNIST_loader = DataLoader(dataset=MNIST_data, batch_size=samples_in_batch, shuffle=True)
 
 MNIST_data_test = MNISTDatasetTest()
-MNIST_loaded_test = DataLoader(dataset=MNIST_data_test, batch_size=1)
+MNIST_loader_test = DataLoader(dataset=MNIST_data_test, batch_size=1)
 
 net = Net()
 optimizer = optim.Adam(net.parameters(), lr=0.0001)
 epochs = 5
 
 for epoch in range(epochs):
-    for X, y in MNIST_loaded:
+    for X, y in MNIST_loader:
         optimizer.zero_grad()
         output = net(X)
 
@@ -76,7 +76,7 @@ for epoch in range(epochs):
     total = 0
 
     with torch.no_grad():
-        for X, y in MNIST_loaded_test:
+        for X, y in MNIST_loader_test:
             output = net(X)
             if torch.argmax(output) == y:
                 correct += 1
