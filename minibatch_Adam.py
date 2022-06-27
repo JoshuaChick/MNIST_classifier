@@ -39,12 +39,14 @@ class MNISTDatasetTest(Dataset):
 class Net(nn.Module):
     def __init__(self):
         super().__init__()
-        self.l1 = nn.Linear(784, 32)
-        self.l2 = nn.Linear(32, 10)
+        self.l1 = nn.Linear(784, 256)
+        self.l2 = nn.Linear(256, 128)
+        self.l3 = nn.Linear(128, 10)
 
     def forward(self, x):
         x = functional.relu(self.l1(x))
-        x = self.l2(x)
+        x = functional.relu(self.l2(x))
+        x = self.l3(x)
         return functional.softmax(x, dim=1)
 
 
