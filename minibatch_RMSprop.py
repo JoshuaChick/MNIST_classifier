@@ -55,7 +55,7 @@ MNIST_data = MNISTDataset()
 MNIST_loader = DataLoader(dataset=MNIST_data, batch_size=samples_in_batch, shuffle=True)
 
 MNIST_data_test = MNISTDatasetTest()
-MNIST_loader_test = DataLoader(dataset=MNIST_data_test, batch_size=1)
+MNIST_loader_test = DataLoader(dataset=MNIST_data_test)
 
 net = Net()
 optimizer = optim.RMSprop(net.parameters(), lr=0.0001)
