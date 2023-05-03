@@ -39,8 +39,8 @@ class MNISTDatasetTest(Dataset):
 class Net(nn.Module):
     def __init__(self):
         super().__init__()
-        self.l1 = nn.Linear(784, 256)
-        self.l2 = nn.Linear(256, 128)
+        self.l1 = nn.Linear(784, 512)
+        self.l2 = nn.Linear(512, 128)
         self.l3 = nn.Linear(128, 10)
 
     def forward(self, x):
@@ -50,7 +50,7 @@ class Net(nn.Module):
         return functional.softmax(x, dim=1)
 
 
-samples_in_batch = 50
+samples_in_batch = 100
 MNIST_data = MNISTDataset()
 MNIST_loader = DataLoader(dataset=MNIST_data, batch_size=samples_in_batch, shuffle=True)
 
@@ -59,7 +59,7 @@ MNIST_loader_test = DataLoader(dataset=MNIST_data_test)
 
 net = Net()
 optimizer = optim.Adam(net.parameters(), lr=0.0001)
-epochs = 5
+epochs = 50
 
 for epoch in range(epochs):
     for X, y in MNIST_loader:
@@ -84,4 +84,4 @@ for epoch in range(epochs):
                 correct += 1
             total += 1
 
-    print(f"Accuracy: {correct / total * 100}%")
+    print(f"Accuracy: {correct / total * 100:.1F}%")
