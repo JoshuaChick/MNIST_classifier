@@ -6,13 +6,16 @@ from torch.utils.data import Dataset, DataLoader
 import pandas as pd
 
 
+device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+
+
 class MNISTDataset(Dataset):
     def __init__(self):
         y_csv = pd.read_csv('mnist_train.csv', usecols=['label'])
         cols = pd.read_csv('mnist_train.csv', nrows=1).columns
         x_csv = pd.read_csv('mnist_train.csv', usecols=cols[1:])
-        self.y = torch.tensor(y_csv.values, dtype=torch.float32)
-        self.x = torch.tensor(x_csv.values, dtype=torch.float32)
+        self.y = torch.tensor(y_csv.values, dtype=torch.float32).to(device)
+        self.x = torch.tensor(x_csv.values, dtype=torch.float32).to(device)
 
     def __len__(self):
         return len(self.x)
@@ -26,8 +29,8 @@ class MNISTDatasetTest(Dataset):
         y_csv = pd.read_csv('mnist_test.csv', usecols=['label'])
         cols = pd.read_csv('mnist_test.csv', nrows=1).columns
         x_csv = pd.read_csv('mnist_test.csv', usecols=cols[1:])
-        self.y = torch.tensor(y_csv.values, dtype=torch.float32)
-        self.x = torch.tensor(x_csv.values, dtype=torch.float32)
+        self.y = torch.tensor(y_csv.values, dtype=torch.float32).to(device)
+        self.x = torch.tensor(x_csv.values, dtype=torch.float32).to(device)
 
     def __len__(self):
         return len(self.x)
@@ -39,9 +42,9 @@ class MNISTDatasetTest(Dataset):
 class Net(nn.Module):
     def __init__(self):
         super().__init__()
-        self.l1 = nn.Linear(784, 512)
-        self.l2 = nn.Linear(512, 128)
-        self.l3 = nn.Linear(128, 10)
+        self.l1 = nn.Linear(784, 512).to(device)
+        self.l2 = nn.Linear(512, 128).to(device)
+        self.l3 = nn.Linear(128, 10).to(device)
 
     def forward(self, x):
         x = functional.relu(self.l1(x))
@@ -66,7 +69,7 @@ for epoch in range(epochs):
         optimizer.zero_grad()
         output = net(X)
 
-        one_hot = torch.zeros(samples_in_batch, 10)
+        one_hot = torch.zeros(samples_in_batch, 10).to(device)
         for i in range(len(one_hot)):
             one_hot[i][int(y[i])] = 1
 
